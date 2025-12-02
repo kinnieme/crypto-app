@@ -68,8 +68,8 @@ const Sidebar = ({ children }) => {
         {settingsExpanded && (
           <div className="submenu">
             <div className="submenu-item" onClick={() => window.location.href = '/overview'}>Overview</div>
-            <div className="submenu-item" onClick={() => window.location.href = '/withdraw'}>Security</div>
-            <div className="submenu-item" onClick={() => window.location.href = '/withdraw'}>Identification</div>
+            <div className="submenu-item" onClick={() => window.location.href = '/security'}>Security</div>
+            <div className="submenu-item" onClick={() => window.location.href = '/identification'}>Identification</div>
             <div className="submenu-item" onClick={() => window.location.href = '/withdraw'}>Account</div>
           </div>
         )}

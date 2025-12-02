@@ -1,0 +1,138 @@
+.security-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #141414;
+  margin-top: 50px;
+}
+
+.security-content {
+  flex: 1;
+  padding: 20px;
+  margin-left: 250px; /* Adjust based on sidebar width */
+}
+
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.main-security-section {
+  background: #1C1C1C;
+  border-radius: 32px;
+  padding: 24px;
+  margin-bottom: 24px;
+  min-width: 1200px;
+}
+
+.security-content .section-header h3 {
+  font-size: 24px;
+  font-weight: 500;
+  color: #FFFFFF;
+  margin: 0;
+  text-align: left;
+  margin: 0 0 8px 0;
+}
+
+.security-content .section-header p {
+  font-size: 12px;
+  font-weight: 400;
+  color: #FFFFFF;
+  margin: 0 0 8px 0;
+  text-align: left;
+}
+
+.security-subsection {
+  background: #1C1C1C;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.security-content .subsection-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.subsection-icon {
+
+  margin-right: 16px;
+}
+
+.security-content .subsection-text {
+  flex: 1;
+  text-align: left;
+}
+
+.security-content .top-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #FFFFFF;
+  margin-bottom: 4px;
+}
+
+.security-content .bottom-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+}
+
+.security-content .bottom-text .status {
+  font-size: 16px;
+  color: #FFB74D;
+  margin-top: 4px;
+}
+
+.security-content .subsection-action {
+  font-size: 14px;
+  font-weight: 500;
+  color: #FFC107;
+  text-align: right;
+  white-space: nowrap;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.toggle-switch {
+  margin-left: auto;
+}
+
+.toggle-slider {
+  width: 48px;
+  height: 24px;
+  border-radius: 16px;
+  background-color: #333333;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.toggle-slider.enabled {
+  background-color: #4CAF50;
+}
+
+.toggle-knob {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background-color: #F5F5F5;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+ transition: left 0.3s;
+}
+
+.toggle-slider.enabled .toggle-knob {
+  left: 26px;
+}
+
+.divider-security {
+  width: 100%;
+  height: 1px; /* Высота 100px */
+  background-color: #333333;
+  margin: 20px 0px;
+}

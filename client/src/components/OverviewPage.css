@@ -14,7 +14,9 @@
   margin-left: 250px; /* Account for sidebar width */
 
 }
-
+.security-level {
+  color: #D32F2F;
+}
 .main-content {
   flex: 1;
   padding: 20px;

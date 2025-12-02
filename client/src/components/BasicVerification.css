@@ -1,0 +1,138 @@
+.basic-verification-section {
+  background: #1C1C1C;
+  border-radius: 32px;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: left;
+  width: 730px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: #FFFFFF;
+  margin: 0;
+  text-align: left;
+}
+
+.verify-button {
+  background-color: #FFC107;
+  border: none;
+  border-radius: 16px;
+  color: #141414;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.verify-button:hover {
+  background-color: #e6af06;
+}
+
+.benefits-section {
+  margin-bottom: 20px;
+}
+
+.benefits-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.benefits-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.benefits-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #FFFFFF;
+}
+
+.benefits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.benefit-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.benefit-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.benefit-name {
+  font-size: 16px;
+  font-weight: 400;
+  color: #BDBDBD;
+ margin-bottom: 4px;
+}
+
+.benefit-value {
+  font-size: 16px;
+  font-weight: 400;
+  color: #FFFFFF;
+}
+
+.check-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.requirements-section {
+  margin-bottom: 20px;
+}
+
+.requirements-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.requirements-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.requirements-title {
+ font-size: 16px;
+  font-weight: 500;
+  color: #FFFFFF;
+}
+
+.promo-card {
+  background-color: #333333;
+  border-radius: 32px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.promo-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+}
+
+.promo-text {
+  font-size: 16px;
+  font-weight: 400;
+  color: #BDBDBD;
+}

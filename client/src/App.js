@@ -15,6 +15,8 @@ import './App.css';
 import DepositPage from './components/DepositPage';
 import WithdrawPage from './components/WithdrawPage';
 import OverviewPage from './components/OverviewPage';
+import SecurityPage from './components/SecurityPage';
+import IdentificationPage from './components/IdentificationPage';
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
           <Route path="/deposit" element={<DepositPage />} />
           <Route path="/withdraw" element={<WithdrawPage />} />
           <Route path="/overview" element={<OverviewPage />} />
+          <Route path="/security" element={<SecurityPage />} />
+          <Route path="/identification" element={<IdentificationPage />} />
         </Routes>
         <Footer />
       </div>

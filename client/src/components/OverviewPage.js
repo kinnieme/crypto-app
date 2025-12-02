@@ -85,8 +85,10 @@ const OverviewPage = () => {
               <tbody>
                 {loginActivityData && Array.isArray(loginActivityData) && loginActivityData.map((activity, index) => (
                   <tr key={index}>
-                    <td>{activity.time}</td>
-                    <td className={activity.status === 'Success' ? 'status-success' : 'status-fail'}>
+                    <td>
+                      {new Date(activity.time).toLocaleString()}
+                    </td>
+                    <td style={{ color: activity.status === 'Success' ? '#4CAF50' : '#D32F2F' }}>
                       {activity.status}
                     </td>
                     <td>{activity.ip}</td>
