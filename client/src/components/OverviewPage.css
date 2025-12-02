@@ -1,0 +1,124 @@
+.overview-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #141414;
+  color: #F5F5F5;
+  width: 1500px;
+  margin-left: 100px;
+  margin-top: 50px;
+}
+
+.overview-content {
+  flex: 1;
+  padding: 20px;
+  margin-left: 250px; /* Account for sidebar width */
+
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+ flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.overview-sections {
+  width: 100%;
+  max-width: 1500px;
+  margin-top: 20px;
+}
+
+.login-activity-section {
+  margin-top: 40px;
+  width: 100%;
+}
+
+.login-activity-section h2 {
+  color: #F5F5F5;
+  font-size: 24px;
+ font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.login-activity-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1C1C1C;
+  border-radius: 32px;
+  overflow: hidden;
+}
+
+.login-activity-table th {
+  color: #F5F5F5;
+  font-size: 16px;
+ font-weight: 500;
+  text-align: left;
+  padding: 15px 20px;
+  border-bottom: 1px solid #333333;
+}
+
+.login-activity-table td {
+  color: #F5F5F5;
+  font-size: 14px;
+ padding: 15px 20px;
+  border-bottom: 1px solid #333333;
+}
+
+.login-activity-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.status-success {
+  color: #4CAF50;
+}
+
+.status-fail {
+  color: #D32F2F;
+}
+
+.overview-subsection {
+  background: #1C1C1C;
+ border-radius: 32px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  height: 150px;
+}
+
+.subsection-icon {
+  margin-right: 15px;
+}
+
+.subsection-content {
+ flex: 1;
+}
+
+.subsection-top-text {
+  color: #FFFFFF;
+  font-size: 16px;
+ font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.subsection-bottom-text {
+  color: #FFFFFF;
+  font-size: 14px;
+ font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.subsection-bottom-text .verification-level {
+  color: #FFB74D;
+  font-size: 16px;
+ font-weight: 500;
+}
+
+.subsection-action {
+  color: #FFC107;
+  font-size: 14px;
+ font-weight: 500;
+  margin-left: auto;
+}

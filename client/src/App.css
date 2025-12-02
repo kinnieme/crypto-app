@@ -1,0 +1,72 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #141414;
+  color: #F5F5F5;
+  overflow-x: hidden;
+}
+
+.App {
+  min-height: 100vh;
+ background-color: #141414;
+  color: #F5F5F5;
+}
+
+.page-content {
+  padding: 20px 40px;
+  min-height: calc(100vh - 70px); /* Account for header height */
+  background-color: #141414;
+  color: #F5F5F5;
+}
+
+.page-content h1 {
+  color: #F5F5F5;
+  margin-bottom: 20px;
+  font-size: 2rem;
+}
+
+/* Global styles for buttons */
+button {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Global styles for links */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Common container styles */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header {
+    padding: 12px 20px;
+    height: 60px;
+  }
+  
+  .nav-list {
+    gap: 16px;
+  }
+  
+  .header-right {
+    gap: 12px;
+  }
+  
+  .page-content {
+    padding: 20px;
+  }
+}

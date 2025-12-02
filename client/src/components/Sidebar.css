@@ -1,0 +1,116 @@
+.sidebar {
+  width: 250px;
+  background-color: #141414;
+  height: calc(100vh - 40px);
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 100px;
+  margin-top: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  padding: 0 20px 20px;
+}
+
+.sidebar-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.sidebar-title {
+  color: #FFCD39;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.sidebar-item:hover {
+  background-color: #2a2a2a;
+}
+
+.sidebar-text {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 500;
+  color: #F5F5F5;
+  margin: 0 10px;
+}
+
+.sidebar-arrow {
+  width: 16px;
+  height: 16px;
+}
+
+.submenu {
+  padding-left: 50px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.submenu-item {
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #BDBDBD;
+  cursor: pointer;
+}
+
+.submenu-item:hover {
+  color: #FFCD39;
+}
+
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-top: 1px solid #333333;
+  margin-bottom: 50px;
+
+}
+
+.avatar-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.account-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.account-name {
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+
+.account-settings {
+  color: #FFC107;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}

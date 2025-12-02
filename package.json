@@ -1,0 +1,41 @@
+{
+  "name": "zyrix-crypto-exchange",
+  "version": "1.0.0",
+  "description": "A cryptocurrency exchange application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "client": "cd client && npm start",
+    "server": "nodemon server.js",
+    "both": "concurrently \"npm run server\" \"npm run client\"",
+    "install-client": "cd client && npm install",
+    "build": "cd client && npm run build",
+    "postinstall": "npm run install-client",
+    "info": "echo Zyrix Crypto Exchange - Server running on http://localhost:5000 && echo Client app runs on http://localhost:3000 when started separately && echo API available at http://localhost:5000/api/time"
+  },
+  "keywords": [
+    "cryptocurrency",
+    "exchange",
+    "react",
+    "express",
+    "postgresql"
+  ],
+  "author": "Zyrix Development Team",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mysql": "^2.18.1",
+    "pg": "^8.16.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.1"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20"
+  }
+}
