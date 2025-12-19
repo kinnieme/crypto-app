@@ -1,0 +1,336 @@
+.home-container {
+  position: relative;
+  min-height: 100vh;
+ background-color: #141414;
+ overflow: hidden;
+}
+
+.header-placeholder {
+  height: 70px; /* высота хедера */
+}
+
+.home-content {
+  position: relative;
+  z-index: 2;
+  padding-left: 100px;
+  padding-top: 100px;
+}
+
+.main-title {
+  color: #F5F5F5;
+  font-size: 54px;
+  font-weight: 600; /* SemiBold */
+  line-height: 1.2;
+  margin-bottom: 30px;
+}
+
+.highlight {
+  color: #FFC107; /* желтый цвет для слова Future */
+}
+
+
+.subtitle {
+  display: flex;
+ gap: 16px;
+  color: #BDBDBD;
+ font-size: 24px;
+ font-weight: 500; /* Medium */
+}
+
+.subtitle-word {
+  white-space: nowrap;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1200px; /* Увеличенный размер */
+  height: 900px; /* Увеличенный размер */
+  background-image: url('../../../public/image/home/backgraph.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right;
+  z-index: 1;
+  opacity: 1; /* Убрана прозрачность */
+}
+
+.start-trading-btn {
+  margin-top: 80px;
+  background-color: #FFC107;
+ color: #141414;
+  border: 4px solid #141414;
+  padding: 15px 32px;
+  font-size: 18px;
+ font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 32px;
+ cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 0 1px #574B29; /* Вторая обводка */
+ width: 240px;
+ text-align: center;
+}
+
+.start-trading-btn:hover {
+ transform: scale(1.02); /* Еле заметное увеличение */
+}
+
+.stats-section {
+  position: relative;
+  z-index: 3;
+  margin-top: 400px; /* Отступ от предыдущего контента */
+  padding: 40px;
+  background-color: #1C1C1C;
+  border-radius: 32px;
+  width: 65%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-number {
+  color: #F5F5F5;
+  font-size: 40px;
+ font-weight: 500; /* Medium */
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  color: #BDBDBD;
+ font-size: 16px;
+ font-weight: 400; /* Regular */
+}
+
+.divider-home {
+  width: 1px;
+  height: 100px; /* Высота 100px */
+  background-color: #333333;
+  margin: 0 20px; /* Отступы по бокам от разделителя */
+}
+
+.main-images-section {
+  margin: 100px auto 0; /* Отступ сверху и центрирование */
+  padding: 0 20px;
+  width: 100%;
+  max-width: 1920px;
+}
+
+.container-wrapper {
+  max-width: 1200px; /* Максимальная ширина, за которую элементы не могут выходить */
+  margin: 0 auto;
+  position: relative;
+}
+
+.section-title {
+  color: #F5F5F5;
+  font-size: 32px;
+  font-weight: 500; /* Medium */
+  margin-bottom: 40px;
+  text-align: left; /* Выравнивание по левому краю */
+}
+
+.first-image-set {
+  display: flex;
+  justify-content: center; /* Выравнивание изображений по центру */
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.second-image-set {
+  margin-top: 16px; /* Отступ от верхних изображений */
+  display: flex;
+  justify-content: center; /* Центрируем четвертое изображение */
+}
+
+.section-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Удаляем дублирующиеся определения классов */
+
+.text-and-images-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  width: 100%; /* Занимает всю ширину контейнера */
+}
+
+.images-title {
+  color: #F5F5F5;
+  font-size: 32px;
+  font-weight: 500; /* Medium */
+  margin-bottom: 40px;
+  text-align: left;
+  align-self: flex-start; /* Прижимаем заголовок к левому краю */
+}
+
+.images-row {
+  display: flex;
+  justify-content: center; /* Выравнивание изображений по центру */
+  gap: 16px;
+  margin-bottom: 16px;
+  width: 100%; /* Занимает всю ширину родительского контейнера */
+}
+
+.images-bottom {
+
+  display: flex;
+  justify-content: center; /* Центрируем четвертое изображение */
+}
+
+/* Добавляем стиль для кнопки Start Trading */
+.trading-button {
+  margin-top: 80px; /* Отступ от текста */
+  background-color: #FFC107; /* Желтый фон */
+  color: #141414; /* Цвет текста #141414 */
+  border: 4px solid #141414; /* Первая обводка */
+  outline: 1px solid #574B29; /* Вторая обводка */
+  outline-offset: -5px; /* Смещение второй обводки внутрь */
+  padding: 12px 24px;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.trading-button:hover {
+  box-shadow: 0 0 15px #FFC107; /* Желтое свечение при наведении */
+}
+
+.comments-section {
+  margin-top: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.comments-image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+.faq-section {
+  margin-top: 100px;
+  max-width: 1200px; /* Такой же размер как и изображение внутри */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+}
+
+.faq-title {
+  color: #F5F5F5;
+  font-size: 32px;
+  font-weight: 500; /* Medium */
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.faq-title .highlight {
+  color: #FFC107; /* Желтый цвет для слова Questions */
+}
+
+.faq-image {
+  width: 100%;
+  height: auto;
+}
+
+.support-button-container {
+  display: flex;
+  margin-top: 100px;
+  justify-content: right;
+  margin-right: 100px;
+}
+
+.support-button {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+}
+
+.crypto-journey-section {
+  background-color: #1C1C1C;
+  border-radius: 32px;
+  padding: 30px;
+  margin: 40px auto;
+  max-width: 1200px;
+}
+
+.journey-title {
+  color: #F5F5F5;
+  font-size: 24px;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+.journey-cards-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.journey-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.card-icon {
+  margin-bottom: 20px;
+}
+
+.card-title {
+  color: #F5F5F5;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: left;
+  margin: 0 0 10px 0;
+}
+
+.card-text {
+  color: #BDBDBD;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  margin: 0 0 20px 0;
+}
+
+.card-button {
+  background-color: transparent;
+  color: #FFCD39;
+  border: 1px solid #FFCD39;
+  border-radius: 16px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+}
+
+.card-button:hover {
+  background-color: #FFCD39;
+  color: #141414;
+}

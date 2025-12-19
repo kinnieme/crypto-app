@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS market_trends (
     rank INTEGER NOT NULL,
     name VARCHAR(100) NOT NULL,
     price DECIMAL(15, 3) NOT NULL,
-    change_24h DECIMAL(6, 2) NOT NULL,  /* Может хранить положительные и отрицательные значения с 2 знаками после запятой */
+    change_24h DECIMAL(6, 2) NOT NULL  /* Может хранить положительные и отрицательные значения с 2 знаками после запятой */
 );
 
 -- Добавление записей в таблицу
@@ -19,12 +19,25 @@ VALUES
 -- Создание таблицы пользователей для хранения данных о зарегистрированных пользователях
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
     email VARCHAR(255) UNIQUE,
     phone_code VARCHAR(10),
     phone_number VARCHAR(20),
     password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Создание таблицы портфолио для хранения криптовалютных активов пользователей
+CREATE TABLE IF NOT EXISTS portfolio (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    crypto_name VARCHAR(50) NOT NULL,
+    amount DECIMAL(18, 8) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, crypto_name)
 );
 
 -- Create the login_activity table
@@ -50,3 +63,5 @@ CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 -- Создание индекса для улучшения производительности поиска по номеру телефона
 CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone_code, phone_number);
 
+-- Создание индекса для улучшения производительности поиска по user_id в таблице portfolio
+CREATE INDEX IF NOT EXISTS idx_portfolio_user_id ON portfolio(user_id);

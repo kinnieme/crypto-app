@@ -1,32 +1,32 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './components/AuthContext';
-import Header from './components/Header';
-import HomePage from './components/HomePage';
-import MarketPage from './components/MarketPage';
-import SpotPage from './components/SpotPage';
-import SupportPage from './components/SupportPage';
-import LearnPage from './components/LearnPage';
-import SignupPage from './components/SignupPage';
-import LoginPage from './components/LoginPage';
-import DashboardPage from './components/DashboardPage';
-import AssetPage from './components/AssetPage';
-import Footer from './components/Footer';
+import { AuthProvider, useAuth } from './components/auth/AuthContext';
+import Header from './components/layout/Header';
+import HomePage from './components/pages/HomePage';
+import MarketPage from './components/pages/MarketPage';
+import SpotPage from './components/pages/SpotPage';
+import SupportPage from './components/pages/SupportPage';
+import LearnPage from './components/shared/LearnPage';
+import SignupPage from './components/auth/SignupPage';
+import LoginPage from './components/auth/LoginPage';
+import DashboardPage from './components/pages/DashboardPage';
+import AssetPage from './components/pages/AssetPage';
+import Footer from './components/layout/Footer';
 import './App.css';
-import DepositPage from './components/DepositPage';
-import WithdrawPage from './components/WithdrawPage';
-import OverviewPage from './components/OverviewPage';
-import SecurityPage from './components/SecurityPage';
-import IdentificationPage from './components/IdentificationPage';
-import AccountPage from './components/AccountPage';
-import SpotHistoryPage from './components/SpotHistoryPage';
-import TransactionHistoryPage from './components/TransactionHistoryPage';
-import BlogPage from './components/BlogPage';
-import NotificationPage from './components/NotificationPage';
-import PrivacyPolicyPage from './components/PrivacyPolicyPage';
-import NotFoundPage from './components/NotFoundPage';
-import BackpackPage from './components/BackpackPage';
-import AuthLayout from './components/AuthLayout';
+import DepositPage from './components/pages/DepositPage';
+import WithdrawPage from './components/pages/WithdrawPage';
+import OverviewPage from './components/pages/OverviewPage';
+import SecurityPage from './components/pages/SecurityPage';
+import IdentificationPage from './components/pages/IdentificationPage';
+import AccountPage from './components/pages/AccountPage';
+import SpotHistoryPage from './components/pages/SpotHistoryPage';
+import TransactionHistoryPage from './components/pages/TransactionHistoryPage';
+import BlogPage from './components/pages/BlogPage';
+import NotificationPage from './components/pages/NotificationPage';
+import PrivacyPolicyPage from './components/pages/PrivacyPolicyPage';
+import NotFoundPage from './components/pages/NotFoundPage';
+import BackpackPage from './components/pages/BackpackPage';
+import AuthLayout from './components/auth/AuthLayout';
 
 // Protected route component that redirects unauthenticated users to login
 const ProtectedRoute = ({ children }) => {
@@ -207,7 +207,7 @@ function App() {
         <Footer />
       </div>
     </Router>
-  );
+ );
 }
 
 // Wrapper for using auth context

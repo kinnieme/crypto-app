@@ -1,0 +1,213 @@
+.signup-page {
+  background-color: #141414;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-image: url('../../../public/image/signup/background.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.signup-container {
+  width: 600px;
+  padding: 40px;;
+}
+
+.logo-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.signup-logo {
+  width: 120px;
+  height: auto;
+}
+
+.registration-method-section {
+  display: flex;
+  border: 1px solid #FFC107;
+  border-radius: 40px;
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.method-button {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  background: none;
+  color: #F5F5F5;
+  font-weight: 500;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.method-button.selected {
+  background-color: #FFC107;
+  color: #141414;
+  border-radius: 32px;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.phone-input-container {
+  display: flex;
+  gap: 10px;
+}
+
+.phone-code-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex: 0 25%;
+  height: 55px;
+  width: 100%;
+}
+
+.country-flag {
+  position: absolute;
+  left: 12px;
+  z-index: 3;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.phone-code-select {
+  padding: 14px 40px 14px 40px; /* Добавлены отступы для иконки флага и стрелки */
+  background-color: #333333;
+  color: #BDBDBD;
+  border: none;
+  border-radius: 32px;
+  font-size: 16px;
+  font-weight: 400;
+  outline: none;
+  height: 55px;
+  appearance: none; /* Убираем стандартный вид селекта */
+  position: relative;
+  text-align: center; /* Центрируем текст */
+  z-index: 2; /* Устанавливаем z-index выше флага */
+}
+.phone-code-select::after {
+  content: ">";
+}
+
+.input-field {
+  width: 100%;
+  padding: 14px;
+  background-color: #333333;
+  color: #BDBDBD;
+  border: none;
+  border-radius: 32px;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 14px;
+  outline: none;
+}
+
+.password-input-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.password-field {
+  padding-right: 40px; /* Добавляем отступ справа для иконки */
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 24px;
+  top: 40%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  z-index: 2;
+}
+.agreement-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+
+.checkbox-input {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #BDBDBD;
+  border-radius: 8px;
+  margin-right: 12px;
+  appearance: none;
+  cursor: pointer;
+}
+
+.checkbox-input:checked {
+  background-color: #BDBDBD;
+  position: relative;
+}
+
+.checkbox-input:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #141414;
+  font-size: 14px;
+}
+
+.agreement-text {
+  color: #BDBDBD;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.signup-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #FFC107;
+  color: #141414;
+  border: none;
+  border-radius: 32px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup-button:hover {
+  background-color: #e0a800;
+}
+
+.message {
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
