@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 import './SignupPage.css';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [registrationMethod, setRegistrationMethod] = useState('email'); // 'email' or 'phone'
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -11,8 +15,8 @@ const LoginPage = () => {
 
   const handleRegistrationMethodChange = (method) => {
     setRegistrationMethod(method);
- };
-
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -65,10 +69,17 @@ const LoginPage = () => {
         const result = await response.json();
         alert('Login successful!');
         console.log(result);
-        // Сохраняем токен в localStorage (в реальном приложении токен будет в ответе)
-        localStorage.setItem('authToken', 'some-token-value');
+        // Get the token and userId from the response
+        const token = result.token || 'some-token-value'; // Use the token from response or fallback
+        const userId = result.userId; // Get userId from response
+        // Store userId in localStorage
+        if (userId) {
+          localStorage.setItem('userId', userId);
+        }
+        // Use the login function from auth context
+        login(token);
         // Перенаправление на главную страницу или другую страницу после входа
-        window.location.href = '/dashboard';
+        navigate('/');
       } else {
         const error = await response.json();
         alert(`Login failed: ${error.message}`);
@@ -79,7 +90,7 @@ const LoginPage = () => {
     }
   };
 
- return (
+  return (
     <div className="signup-page">
       <div className="signup-container">
         <div className="logo-section">
@@ -99,7 +110,6 @@ const LoginPage = () => {
           >
             Phone number
           </div>
-        
         </div>
         
         <form className="signup-form" onSubmit={handleSubmit}>

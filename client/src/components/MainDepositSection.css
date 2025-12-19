@@ -174,3 +174,85 @@
   margin-left: 13px;
   margin-top: 0;
 }
+
+/* Hide spin buttons for number inputs */
+.amount-input::-webkit-outer-spin-button,
+.amount-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.amount-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Styling for amount input */
+.amount-input {
+  margin-left: 90px;
+  width: 400px;
+  border: 1px solid #4C4C4C;
+  border-radius: 32px;
+  background: none;
+  color: #6F6F6F;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.amount-input::placeholder {
+  color: #6F6F6F;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.amount-input.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Styling for buy button */
+.buy-button {
+  margin-left: 40px;
+  width: 400px;
+  border-radius: 32px;
+  background: #333333;
+  color: #BDBDBD;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.buy-button.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.buy-button:disabled {
+  cursor: not-allowed;
+}
+
+.success-message {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 32px;
+  text-align: center;
+}
+
+.error-message {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f44336;
+  color: white;
+  border-radius: 32px;
+  text-align: center;
+}

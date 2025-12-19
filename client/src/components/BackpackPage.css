@@ -1,0 +1,44 @@
+.backpack-page {
+  padding: 20px;
+  background-color: #141414;
+  min-height: 100vh;
+  color: #F5F5F5;
+}
+
+.backpack-page h1 {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #F5F5F5;
+}
+
+.assets-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #2A2A2A;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.assets-table th,
+.assets-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #333333;
+}
+
+.assets-table th {
+  background-color: #1C1C1C;
+  font-size: 14px;
+ font-weight: 500;
+  color: #BDBDBD;
+}
+
+.assets-table td {
+  font-size: 14px;
+  color: #F5F5F5;
+}
+
+.assets-table tr:last-child td {
+  border-bottom: none;
+}

@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 import './Header.css';
 
 const Header = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    // Проверяем наличие токена в localStorage
-    const token = localStorage.getItem('authToken');
-    setIsAuthenticated(!!token);
-  }, []);
   return (
     <header className="header">
       <div className="header-left">
@@ -20,10 +16,14 @@ const Header = () => {
         </div>
         <nav className="navigation">
           <ul className="nav-list">
-            <li className="nav-item"><a href="/market" className="nav-link">Market</a></li>
-            <li className="nav-item"><a href="/spot" className="nav-link">Spot</a></li>
-            <li className="nav-item"><a href="/support" className="nav-link">Support</a></li>
-            <li className="nav-item"><a href="/learn" className="nav-link">Learn</a></li>
+            <li className="nav-item"><Link to="/blog" className="nav-link">Blog</Link></li>
+            {isAuthenticated && (
+              <>
+                <li className="nav-item"><Link to="/market" className="nav-link">Market</Link></li>
+                <li className="nav-item"><Link to="/spot" className="nav-link">Spot</Link></li>
+                <li className="nav-item"><Link to="/support" className="nav-link">Support</Link></li>
+              </>
+            )}
           </ul>
         </nav>
       </div>

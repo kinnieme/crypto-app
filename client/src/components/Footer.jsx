@@ -42,13 +42,14 @@ const Footer = () => {
           <a href="/affiliates" className="nav-link">Affiliates</a>
           <a href="/careers" className="nav-link">Careers</a>
           <a href="/announcement" className="nav-link">Announcement</a>
+          <a href="/privacypolicy" className="nav-link">Privacy Policy</a>
         </div>
         <div className="nav-column">
           <h3 className="nav-category">Support</h3>
           <a href="/help" className="nav-link">Help Center</a>
           <a href="/contact" className="nav-link">Contact Us</a>
           <a href="/status" className="nav-link">Status</a>
-          <a href="/learn" className="nav-link">Learn</a>
+          <a href="/404" className="nav-link" >Learn</a>
         </div>
       </div>
 

@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 import './SignupPage.css';
 
 const SignupPage = () => {
- const [registrationMethod, setRegistrationMethod] = useState('email'); // 'email' or 'phone'
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const [registrationMethod, setRegistrationMethod] = useState('email'); // 'email' or 'phone'
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneCode, setPhoneCode] = useState('+7');
@@ -72,7 +76,17 @@ const SignupPage = () => {
         const result = await response.json();
         alert('Registration successful!');
         console.log(result);
-        // Перенаправление на страницу входа или домашнюю страницу
+        // Get the token and userId from the response
+        const token = result.token || 'some-token-value'; // Use the token from response or fallback
+        const userId = result.userId; // Get userId from response
+        // Store userId in localStorage
+        if (userId) {
+          localStorage.setItem('userId', userId);
+        }
+        // Use the login function from auth context to set authentication state
+        login(token);
+        // Перенаправление на домашнюю страницу после регистрации
+        navigate('/');
       } else {
         const error = await response.json();
         alert(`Registration failed: ${error.message}`);

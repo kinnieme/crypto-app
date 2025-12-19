@@ -49,6 +49,8 @@ async function initializeDatabase() {
       await client.query(`
         CREATE TABLE IF NOT EXISTS users (
           id SERIAL PRIMARY KEY,
+          first_name VARCHAR(50),
+          last_name VARCHAR(50),
           email VARCHAR(255) UNIQUE,
           phone_code VARCHAR(10),
           phone_number VARCHAR(20),
@@ -58,7 +60,34 @@ async function initializeDatabase() {
         );
       `);
       
+      // Add first_name and last_name columns if they don't exist
+      try {
+        await client.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name VARCHAR(50);');
+      } catch (err) {
+        // Column might already exist, which is fine
+      }
+      
+      try {
+        await client.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name VARCHAR(50);');
+      } catch (err) {
+        // Column might already exist, which is fine
+      }
+      
       console.log('Database tables verified/created');
+      
+      // Create portfolio table if it doesn't exist
+      await client.query(`
+        CREATE TABLE IF NOT EXISTS portfolio (
+          id SERIAL PRIMARY KEY,
+          user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+          crypto_name VARCHAR(50) NOT NULL,
+          amount DECIMAL(18, 8) NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          UNIQUE(user_id, crypto_name)
+        );
+      `);
+      console.log('Portfolio table verified/created');
       
       // Insert sample data if market_trends table is empty
       const marketCount = await client.query('SELECT COUNT(*) FROM market_trends;');
@@ -88,6 +117,16 @@ async function initializeDatabase() {
         console.log('Sample login_activity data inserted');
       }
       
+      // Insert a sample user if users table is empty
+      const userCount = await client.query('SELECT COUNT(*) FROM users;');
+      if (parseInt(userCount.rows[0].count) === 0) {
+        await client.query(`
+          INSERT INTO users (email, phone_code, phone_number, password_hash) VALUES
+            ('john.doe@example.com', '+1', '1234567890', 'hashed_password');
+        `);
+        console.log('Sample user data inserted');
+      }
+       
     } finally {
       client.release();
     }
@@ -171,8 +210,7 @@ app.get('/api/user-id', (req, res) => {
 
 // API endpoint for user security information
 app.get('/api/user-security', (req, res) => {
-  // In a real application, we would get the user ID from the authenticated session
-  // For now, we'll use a placeholder user ID or fetch the first user
+  // For backward compatibility, return the first user if no specific user requested
   const query = 'SELECT email, phone_code, phone_number FROM users ORDER BY id LIMIT 1';
   
   pool.query(query, (err, results) => {
@@ -202,6 +240,730 @@ app.get('/api/user-security', (req, res) => {
       });
     }
   });
+});
+
+// API endpoint for user security information by user ID
+app.get('/api/user-security/:userId', (req, res) => {
+  const userId = req.params.userId;
+  const query = 'SELECT email, phone_code, phone_number FROM users WHERE id = $1';
+  
+  pool.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('Error fetching user security data:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    
+    if (results.rows.length > 0) {
+      const user = results.rows[0];
+      // Format the phone number with the code if available
+      const phoneNumber = user.phone_number ? `${user.phone_code || ''} ${user.phone_number}`.trim() : 'Unverified';
+      res.json({
+        email: user.email || 'Unverified',
+        phone: phoneNumber,
+        loginPassword: 'Set', // This would be determined by checking if password_hash exists
+        antiPhishingEnabled: false // This would be stored in the database in a real app
+      });
+    } else {
+      // Return default values if no user found
+      res.json({
+        email: 'Unverified',
+        phone: 'Unverified',
+        loginPassword: 'Not Set',
+        antiPhishingEnabled: false
+      });
+    }
+  });
+});
+
+// API endpoint for user account information
+app.get('/api/user-account', (req, res) => {
+  // For backward compatibility, return the first user if no specific user requested
+  const query = 'SELECT first_name, last_name, email, phone_number FROM users ORDER BY id LIMIT 1';
+  
+  pool.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching user account data:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    
+    if (results.rows.length > 0) {
+      const user = results.rows[0];
+      res.json({
+        first_name: user.first_name || '',
+        last_name: user.last_name || '',
+        email: user.email || '',
+        phone: user.phone_number || ''
+      });
+    } else {
+      // Return default values if no user found
+      res.json({
+        first_name: '',
+        last_name: '',
+        email: '',
+        phone: ''
+      });
+    }
+  });
+});
+
+// API endpoint for user account information by user ID
+app.get('/api/user-account/:userId', (req, res) => {
+  const userId = req.params.userId;
+  const query = 'SELECT first_name, last_name, email, phone_number FROM users WHERE id = $1';
+  
+  pool.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('Error fetching user account data:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    
+    if (results.rows.length > 0) {
+      const user = results.rows[0];
+      res.json({
+        first_name: user.first_name || '',
+        last_name: user.last_name || '',
+        email: user.email || '',
+        phone: user.phone_number || ''
+      });
+    } else {
+      // Return default values if no user found
+      res.json({
+        first_name: '',
+        last_name: '',
+        email: '',
+        phone: ''
+      });
+    }
+  });
+});
+
+// API endpoint to update user account information
+app.put('/api/user-account', (req, res) => {
+  const { first_name, last_name, email, phone } = req.body;
+  
+  // First check if any user exists
+  pool.query('SELECT id FROM users LIMIT 1', (countErr, countResults) => {
+    if (countErr) {
+      console.error('Error checking user existence:', countErr);
+      res.status(50).json({ error: 'Internal server error' });
+      return;
+    }
+
+    if (countResults.rows.length > 0) {
+      // User exists, update the first user
+      const userId = countResults.rows[0].id;
+      
+      // Check if the email is being changed and if the new email already exists for another user
+      if (email) {
+        // First, get the current user's email to check if it's actually changing
+        pool.query('SELECT email as current_email FROM users WHERE id = $1', [userId], (selectErr, selectResults) => {
+          if (selectErr) {
+            console.error('Error fetching current user email:', selectErr);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+          }
+  
+          if (selectResults.rows.length === 0) {
+            res.status(404).json({ error: 'User not found' });
+            return;
+          }
+  
+          const currentEmail = selectResults.rows[0].current_email;
+  
+          // Only check for duplicates if the email is actually changing
+          if (currentEmail !== email) {
+            // Check if email already exists for a different user
+            pool.query('SELECT id FROM users WHERE email = $1 AND id != $2', [email, userId], (emailCheckErr, emailCheckResults) => {
+              if (emailCheckErr) {
+                console.error('Error checking email uniqueness:', emailCheckErr);
+                res.status(500).json({ error: 'Internal server error' });
+                return;
+              }
+              
+              if (emailCheckResults.rows.length > 0) {
+                // Email already exists for another user
+                res.status(400).json({ error: 'Email is already registered by another user' });
+                return;
+              }
+              
+              // Email is unique, proceed with update
+              const query = `
+                UPDATE users
+                SET first_name = $1, last_name = $2, email = $3, phone_number = $4, updated_at = CURRENT_TIMESTAMP
+                WHERE id = $5
+                RETURNING first_name, last_name, email, phone_number
+              `;
+              
+              pool.query(query, [first_name, last_name, email, phone, userId], (err, results) => {
+                if (err) {
+                  console.error('Error updating user account data:', err);
+                  res.status(500).json({ error: 'Internal server error' });
+                  return;
+                }
+                
+                if (results.rows.length > 0) {
+                  const user = results.rows[0];
+                  res.json({
+                    first_name: user.first_name || '',
+                    last_name: user.last_name || '',
+                    email: user.email || '',
+                    phone: user.phone_number || ''
+                  });
+                } else {
+                  res.status(404).json({ error: 'User not found' });
+                }
+              });
+            });
+          } else {
+            // Email is not changing, proceed with update without email validation
+            const query = `
+              UPDATE users
+              SET first_name = $1, last_name = $2, phone_number = $3, updated_at = CURRENT_TIMESTAMP
+              WHERE id = $4
+              RETURNING first_name, last_name, email, phone_number
+            `;
+            
+            pool.query(query, [first_name, last_name, phone, userId], (err, results) => {
+              if (err) {
+                console.error('Error updating user account data:', err);
+                res.status(500).json({ error: 'Internal server error' });
+                return;
+              }
+              
+              if (results.rows.length > 0) {
+                const user = results.rows[0];
+                res.json({
+                  first_name: user.first_name || '',
+                  last_name: user.last_name || '',
+                  email: user.email || '',
+                  phone: user.phone_number || ''
+                });
+              } else {
+                res.status(404).json({ error: 'User not found' });
+              }
+            });
+          }
+        });
+      } else {
+        // No email update, proceed directly
+        const query = `
+          UPDATE users
+          SET first_name = $1, last_name = $2, phone_number = $3, updated_at = CURRENT_TIMESTAMP
+          WHERE id = $4
+          RETURNING first_name, last_name, email, phone_number
+        `;
+        
+        pool.query(query, [first_name, last_name, phone, userId], (err, results) => {
+          if (err) {
+            console.error('Error updating user account data:', err);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+          }
+          
+          if (results.rows.length > 0) {
+            const user = results.rows[0];
+            res.json({
+              first_name: user.first_name || '',
+              last_name: user.last_name || '',
+              email: user.email || '',
+              phone: user.phone_number || ''
+            });
+          } else {
+            res.status(404).json({ error: 'User not found' });
+          }
+        });
+      }
+    } else {
+      // No users exist, create a new one
+      const insertQuery = `
+        INSERT INTO users (first_name, last_name, email, phone_number, password_hash)
+        VALUES ($1, $2, $3, $4, 'default_hash')
+        RETURNING first_name, last_name, email, phone_number
+      `;
+      
+      pool.query(insertQuery, [first_name, last_name, email, phone], (insertErr, insertResults) => {
+        if (insertErr) {
+          console.error('Error inserting user account data:', insertErr);
+          res.status(500).json({ error: 'Internal server error' });
+          return;
+        }
+        
+        if (insertResults.rows.length > 0) {
+          const user = insertResults.rows[0];
+          res.json({
+            first_name: user.first_name || '',
+            last_name: user.last_name || '',
+            email: user.email || '',
+            phone: user.phone_number || ''
+          });
+        } else {
+          res.status(500).json({ error: 'Failed to create user' });
+        }
+      });
+    }
+  });
+});
+
+// API endpoint to update user account information by user ID
+app.put('/api/user-account/:userId', (req, res) => {
+  const userId = req.params.userId;
+  const { first_name, last_name, email, phone } = req.body;
+  
+  // Check if the email is being changed and if the new email already exists for another user
+  if (email) {
+    // First, get the current user's email to check if it's actually changing
+    pool.query('SELECT email as current_email FROM users WHERE id = $1', [userId], (selectErr, selectResults) => {
+      if (selectErr) {
+        console.error('Error fetching current user email:', selectErr);
+        res.status(500).json({ error: 'Internal server error' });
+        return;
+      }
+
+      if (selectResults.rows.length === 0) {
+        res.status(404).json({ error: 'User not found' });
+        return;
+      }
+
+      const currentEmail = selectResults.rows[0].current_email;
+
+      // Only check for duplicates if the email is actually changing
+      if (currentEmail !== email) {
+        // Check if email already exists for a different user
+        pool.query('SELECT id FROM users WHERE email = $1 AND id != $2', [email, userId], (emailCheckErr, emailCheckResults) => {
+          if (emailCheckErr) {
+            console.error('Error checking email uniqueness:', emailCheckErr);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+          }
+          
+          if (emailCheckResults.rows.length > 0) {
+            // Email already exists for another user
+            res.status(400).json({ error: 'Email is already registered by another user' });
+            return;
+          }
+          
+          // Email is unique, proceed with update
+          const query = `
+            UPDATE users
+            SET first_name = $1, last_name = $2, email = $3, phone_number = $4, updated_at = CURRENT_TIMESTAMP
+            WHERE id = $5
+            RETURNING first_name, last_name, email, phone_number
+          `;
+          
+          pool.query(query, [first_name, last_name, email, phone, userId], (err, results) => {
+            if (err) {
+              console.error('Error updating user account data:', err);
+              res.status(500).json({ error: 'Internal server error' });
+              return;
+            }
+            
+            if (results.rows.length > 0) {
+              const user = results.rows[0];
+              res.json({
+                first_name: user.first_name || '',
+                last_name: user.last_name || '',
+                email: user.email || '',
+                phone: user.phone_number || ''
+              });
+            } else {
+              res.status(404).json({ error: 'User not found' });
+            }
+          });
+        });
+      } else {
+        // Email is not changing, proceed with update without email validation
+        const query = `
+          UPDATE users
+          SET first_name = $1, last_name = $2, phone_number = $3, updated_at = CURRENT_TIMESTAMP
+          WHERE id = $4
+          RETURNING first_name, last_name, email, phone_number
+        `;
+        
+        pool.query(query, [first_name, last_name, phone, userId], (err, results) => {
+          if (err) {
+            console.error('Error updating user account data:', err);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+          }
+          
+          if (results.rows.length > 0) {
+            const user = results.rows[0];
+            res.json({
+              first_name: user.first_name || '',
+              last_name: user.last_name || '',
+              email: user.email || '',
+              phone: user.phone_number || ''
+            });
+          } else {
+            res.status(404).json({ error: 'User not found' });
+          }
+        });
+      }
+    });
+  } else {
+    // No email provided in update, proceed directly
+    const query = `
+      UPDATE users
+      SET first_name = $1, last_name = $2, phone_number = $3, updated_at = CURRENT_TIMESTAMP
+      WHERE id = $4
+      RETURNING first_name, last_name, email, phone_number
+    `;
+    
+    pool.query(query, [first_name, last_name, phone, userId], (err, results) => {
+      if (err) {
+        console.error('Error updating user account data:', err);
+        res.status(500).json({ error: 'Internal server error' });
+        return;
+      }
+      
+      if (results.rows.length > 0) {
+        const user = results.rows[0];
+        res.json({
+          first_name: user.first_name || '',
+          last_name: user.last_name || '',
+          email: user.email || '',
+          phone: user.phone_number || ''
+        });
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    });
+  }
+});
+
+// API endpoint for user registration (signup)
+app.post('/api/signup', async (req, res) => {
+  const { method, email, phoneCode, phoneNumber, password } = req.body;
+
+  // Validation
+  if (!password || password.length < 6) {
+    return res.status(400).json({
+      error: 'Password must be at least 6 characters long'
+    });
+  }
+
+  if (method === 'email') {
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      return res.status(400).json({
+        error: 'Please enter a valid email address'
+      });
+    }
+  } else if (method === 'phone') {
+    // Validate phone number
+    if (!phoneNumber || phoneNumber.length < 10) {
+      return res.status(400).json({
+        error: 'Please enter a valid phone number'
+      });
+    }
+  } else {
+    return res.status(400).json({
+      error: 'Invalid registration method'
+    });
+  }
+
+  try {
+    // Hash the password (in a real app, use bcrypt)
+    // For now, we'll store the plain password hash as a placeholder
+    const passwordHash = password; // In real app, use bcrypt.hashSync(password, 10);
+
+    // Prepare user data based on registration method
+    let insertQuery, queryParams;
+    
+    if (method === 'email') {
+      insertQuery = `
+        INSERT INTO users (email, password_hash, created_at, updated_at)
+        VALUES ($1, $2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        RETURNING id, first_name, last_name, email, phone_code, phone_number, created_at
+      `;
+      queryParams = [email, passwordHash];
+    } else if (method === 'phone') {
+      insertQuery = `
+        INSERT INTO users (phone_code, phone_number, password_hash, created_at, updated_at)
+        VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        RETURNING id, first_name, last_name, email, phone_code, phone_number, created_at
+      `;
+      queryParams = [phoneCode, phoneNumber, passwordHash];
+    }
+
+    const result = await pool.query(insertQuery, queryParams);
+
+    // Log successful registration in login_activity
+    await pool.query(
+      'INSERT INTO login_activity (time, status, ip) VALUES (CURRENT_TIMESTAMP, $1, $2)',
+      ['Success', req.ip || req.connection.remoteAddress || 'unknown']
+    );
+
+    // Return success response with a token
+    res.status(201).json({
+      message: 'Registration successful',
+      userId: result.rows[0].id,
+      method: method,
+      token: 'sample-jwt-token' // In a real app, generate an actual JWT token
+    });
+
+  } catch (err) {
+    console.error('Error during registration:', err);
+    
+    // Check if it's a duplicate email error
+    if (err.code === '23505') { // PostgreSQL unique violation
+      return res.status(400).json({
+        error: 'This email is already registered'
+      });
+    }
+    
+    res.status(500).json({
+      error: 'Internal server error during registration'
+    });
+  }
+});
+
+// API endpoint for user login
+app.post('/api/login', async (req, res) => {
+  const { method, email, phoneCode, phoneNumber, password } = req.body;
+
+  // Validation
+  if (!password) {
+    return res.status(400).json({
+      error: 'Password is required'
+    });
+  }
+
+  if (method === 'email') {
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      return res.status(400).json({
+        error: 'Please enter a valid email address'
+      });
+    }
+  } else if (method === 'phone') {
+    // Validate phone number
+    if (!phoneNumber || phoneNumber.length < 10) {
+      return res.status(400).json({
+        error: 'Please enter a valid phone number'
+      });
+    }
+  } else {
+    return res.status(400).json({
+      error: 'Invalid login method'
+    });
+  }
+
+  try {
+    let query, queryParams;
+    
+    if (method === 'email') {
+      query = 'SELECT id, first_name, last_name, email, password_hash FROM users WHERE email = $1';
+      queryParams = [email];
+    } else if (method === 'phone') {
+      query = 'SELECT id, first_name, last_name, phone_code, phone_number, password_hash FROM users WHERE phone_code = $1 AND phone_number = $2';
+      queryParams = [phoneCode, phoneNumber];
+    }
+
+    const result = await pool.query(query, queryParams);
+
+    if (result.rows.length === 0) {
+      // Log failed login attempt
+      await pool.query(
+        'INSERT INTO login_activity (time, status, ip) VALUES (CURRENT_TIMESTAMP, $1, $2)',
+        ['Fail', req.ip || req.connection.remoteAddress || 'unknown']
+      );
+      
+      return res.status(401).json({
+        error: 'Invalid credentials'
+      });
+    }
+
+    const user = result.rows[0];
+    
+    // In a real app, compare hashed passwords using bcrypt.compareSync(password, user.password_hash)
+    // For now, we'll do a simple comparison
+    if (password !== user.password_hash) {
+      // Log failed login attempt
+      await pool.query(
+        'INSERT INTO login_activity (time, status, ip) VALUES (CURRENT_TIMESTAMP, $1, $2)',
+        ['Fail', req.ip || req.connection.remoteAddress || 'unknown']
+      );
+      
+      return res.status(401).json({
+        error: 'Invalid credentials'
+      });
+    }
+
+    // Log successful login
+    await pool.query(
+      'INSERT INTO login_activity (time, status, ip) VALUES (CURRENT_TIMESTAMP, $1, $2)',
+      ['Success', req.ip || req.connection.remoteAddress || 'unknown']
+    );
+
+    // Return success response with user info and token
+    res.status(200).json({
+      message: 'Login successful',
+      userId: user.id,
+      method: method,
+      token: 'sample-jwt-token' // In a real app, generate an actual JWT token
+    });
+
+  } catch (err) {
+    console.error('Error during login:', err);
+    res.status(500).json({
+      error: 'Internal server error during login'
+    });
+  }
+});
+
+// API endpoint for purchasing cryptocurrency and adding to portfolio
+app.post('/api/purchase-crypto', async (req, res) => {
+  const { userId, token, amount } = req.body;
+
+  // Validation
+  if (!userId || !token || !amount || amount <= 0) {
+    return res.status(400).json({
+      error: 'User ID, token name, and positive amount are required'
+    });
+  }
+
+  try {
+    // Check if user exists
+    const userResult = await pool.query('SELECT id FROM users WHERE id = $1', [userId]);
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({
+        error: 'User not found'
+      });
+    }
+
+    // Insert or update portfolio entry
+    const query = `
+      INSERT INTO portfolio (user_id, crypto_name, amount)
+      VALUES ($1, $2, $3)
+      ON CONFLICT (user_id, crypto_name)
+      DO UPDATE SET amount = portfolio.amount + EXCLUDED.amount, updated_at = CURRENT_TIMESTAMP
+      RETURNING *;
+    `;
+
+    const result = await pool.query(query, [userId, token, amount]);
+
+    res.status(200).json({
+      message: 'Cryptocurrency purchased successfully',
+      portfolioEntry: result.rows[0]
+    });
+
+  } catch (err) {
+    console.error('Error purchasing cryptocurrency:', err);
+    res.status(500).json({
+      error: 'Internal server error during purchase'
+    });
+  }
+});
+
+// API endpoint to get user's crypto assets
+app.get('/api/user-assets/:userId', async (req, res) => {
+  console.log('Received request for user assets:', req.params.userId);
+  const { userId } = req.params;
+
+  if (!userId) {
+    console.log('No userId provided');
+    return res.status(400).json({ message: 'User ID is required' });
+  }
+
+  try {
+    // Check if user exists
+    const userQuery = 'SELECT id FROM users WHERE id = $1';
+    const userResults = await pool.query(userQuery, [userId]);
+    console.log('User query results:', userResults.rows.length);
+
+    if (userResults.rows.length === 0) {
+      console.log('User not found:', userId);
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Get user's crypto assets from the portfolio table
+    const assetsQuery = `
+      SELECT user_id, crypto_name as crypto_type, amount
+      FROM portfolio
+      WHERE user_id = $1
+    `;
+    const assets = await pool.query(assetsQuery, [userId]);
+    console.log('Assets query results:', assets.rows);
+
+    res.json(assets.rows);
+  } catch (error) {
+    console.error('Fetch user assets error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// API endpoint for selling cryptocurrency and reducing from portfolio
+app.post('/api/sell-crypto', async (req, res) => {
+  const { userId, token, amount } = req.body;
+
+  // Validation
+  if (!userId || !token || !amount || amount <= 0) {
+    return res.status(400).json({
+      message: 'User ID, token name, and positive amount are required'
+    });
+  }
+
+  try {
+    // Check if user exists
+    const userResult = await pool.query('SELECT id FROM users WHERE id = $1', [userId]);
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({
+        message: 'User not found'
+      });
+    }
+
+    // Check if user has enough of the specified crypto
+    const currentAmountResult = await pool.query(
+      'SELECT amount FROM portfolio WHERE user_id = $1 AND crypto_name = $2',
+      [userId, token]
+    );
+
+    if (currentAmountResult.rows.length === 0) {
+      return res.status(400).json({
+        message: 'User does not own this cryptocurrency'
+      });
+    }
+
+    const currentAmount = parseFloat(currentAmountResult.rows[0].amount);
+    const sellAmount = parseFloat(amount);
+
+    if (sellAmount > currentAmount) {
+      return res.status(400).json({
+        message: `Insufficient funds. User has ${currentAmount}, but tried to sell ${sellAmount}`
+      });
+    }
+
+    // Update portfolio - reduce amount or remove entry if amount becomes 0
+    if (sellAmount === currentAmount) {
+      // Remove the entry completely if selling all
+      await pool.query(
+        'DELETE FROM portfolio WHERE user_id = $1 AND crypto_name = $2',
+        [userId, token]
+      );
+    } else {
+      // Reduce the amount
+      await pool.query(
+        'UPDATE portfolio SET amount = amount - $1, updated_at = CURRENT_TIMESTAMP WHERE user_id = $2 AND crypto_name = $3',
+        [sellAmount, userId, token]
+      );
+    }
+
+    res.status(200).json({
+      message: 'Cryptocurrency sold successfully'
+    });
+
+  } catch (err) {
+    console.error('Error selling cryptocurrency:', err);
+    res.status(500).json({
+      message: 'Internal server error during sale'
+    });
+  }
 });
 
 // Serve static files from the React app build directory

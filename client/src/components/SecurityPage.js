@@ -5,9 +5,9 @@ import UserProfileSection from './UserProfileSection';
 
 const SecurityPage = () => {
   const [userData, setUserData] = useState({
-    email: 'user@example.com',
-    phone: 'Unverified',
-    loginPassword: 'Set',
+    email: '',
+    phone: '',
+    loginPassword: '',
     antiPhishingEnabled: false
   });
 
@@ -15,16 +15,30 @@ const SecurityPage = () => {
     // Fetch user security data from backend
     const fetchUserData = async () => {
       try {
-        const response = await fetch('/api/user-security');
-        const data = await response.json();
-        setUserData(data);
+        // Get user ID from localStorage to fetch user-specific data
+        const userId = localStorage.getItem('userId');
+        const url = userId ? `/api/user-security/${userId}` : '/api/user-security';
+        const response = await fetch(url);
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data);
+        } else {
+          console.error('Error fetching user security data:', response.statusText);
+          // Fallback data in case of error
+          setUserData({
+            email: '',
+            phone: '',
+            loginPassword: '',
+            antiPhishingEnabled: false
+          });
+        }
       } catch (error) {
         console.error('Error fetching user security data:', error);
         // Fallback data in case of error
         setUserData({
-          email: 'user@example.com',
-          phone: 'Unverified',
-          loginPassword: 'Set',
+          email: '',
+          phone: '',
+          loginPassword: '',
           antiPhishingEnabled: false
         });
       }

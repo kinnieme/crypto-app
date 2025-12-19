@@ -1,0 +1,24 @@
+.transaction-history-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #141414;
+}
+
+.transaction-history-content {
+  flex: 1;
+  padding: 20px;
+  margin-left: 250px; /* Adjust based on sidebar width */
+  max-width: 1200px;
+}
+
+.transaction-history-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: #F5F5F5;
+  margin: 0 0 24px 0;
+  text-align: left;
+}
+
+.market-trends-wrapper .market-trends-title {
+  display: none;
+}
