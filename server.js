@@ -76,14 +76,17 @@ const { initializeDatabase } = require('./server/utils/dbInitializer');
 const { pool } = require('./server/models/db');
 
 // Connect to database and initialize tables
-pool.connect((err) => {
-  if (err) {
+(async () => {
+  try {
+    const dbPool = await pool;
+    // Test the connection
+    await dbPool.query('SELECT 1');
+    logger.info('Connected to database');
+    initializeDatabase();
+  } catch (err) {
     logger.error('Database connection failed:', err);
-    return;
   }
- logger.info('Connected to database');
-  initializeDatabase();
-});
+})();
 
 const PORT = config.server.port;
 app.listen(PORT, () => {

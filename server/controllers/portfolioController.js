@@ -104,7 +104,7 @@ const sellCrypto = async (req, res) => {
  } catch (error) {
     console.error('Error selling cryptocurrency:', error);
     if (error.message.includes('Insufficient funds') || error.message.includes('does not own')) {
-      res.status(40).json({ message: error.message });
+      res.status(400).json({ message: error.message });
     } else {
       res.status(500).json({ message: 'Internal server error during sale' });
     }

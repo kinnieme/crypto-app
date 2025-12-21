@@ -42,6 +42,21 @@ const WithdrawPage = () => {
         return;
       }
 
+      // Get user's current balance for the selected token
+      const assetsResponse = await fetch(`/api/user-assets/${userId}`);
+      if (!assetsResponse.ok) {
+        throw new Error('Failed to fetch user assets');
+      }
+      const assets = await assetsResponse.json();
+      const userAsset = assets.find(asset => asset.crypto_type === selectedToken);
+      const currentBalance = userAsset ? parseFloat(userAsset.amount) : 0;
+
+      if (amount > currentBalance) {
+        setError(`Insufficient funds. You have ${currentBalance} ${selectedToken}, but tried to sell ${amount} ${selectedToken}.`);
+        setMessage('');
+        return;
+      }
+
       // Send sell request to server
       const response = await fetch('/api/sell-crypto', {
         method: 'POST',
